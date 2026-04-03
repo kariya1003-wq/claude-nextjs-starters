@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
+import { ConditionalHeader } from '@/components/layout/conditional-header'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -15,9 +16,9 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'NextJS Starter - 모던 웹 스타터킷',
+  title: '노션 견적서 웹뷰어',
   description:
-    'Next.js 15, TypeScript, TailwindCSS, ShadcnUI로 구축된 프로덕션 준비가 완료된 웹 애플리케이션 스타터킷',
+    '노션 DB에 입력된 견적서 데이터를 전용 URL로 클라이언트에게 즉시 공유하고 PDF로 다운로드할 수 있는 웹뷰어',
 }
 
 export default function RootLayout({
@@ -36,6 +37,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <ConditionalHeader />
           {children}
           <Toaster />
         </ThemeProvider>

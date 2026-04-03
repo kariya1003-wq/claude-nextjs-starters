@@ -1,5 +1,8 @@
 'use client'
 
+// 공급자용 데스크톱 메인 내비게이션
+// PRD 4절 헤더 메뉴: 견적서 목록 (F001)
+
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
@@ -9,9 +12,7 @@ interface NavItem {
   href: string
 }
 
-const navItems: NavItem[] = [
-  { title: '홈', href: '/' },
-]
+const navItems: NavItem[] = [{ title: '견적서 목록', href: '/' }]
 
 export function MainNav() {
   const pathname = usePathname()

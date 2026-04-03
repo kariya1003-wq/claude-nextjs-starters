@@ -1,14 +1,14 @@
 'use client'
 
+// 공급자용 모바일 내비게이션
+// PRD 4절 헤더 메뉴: 견적서 목록 (F001)
+
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { Separator } from '@/components/ui/separator'
 
-const navItems = [
-  { title: '홈', href: '/' },
-  { title: '로그인', href: '/login' },
-]
+const navItems = [{ title: '견적서 목록', href: '/' }]
 
 interface MobileNavProps {
   onClose: () => void
