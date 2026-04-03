@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Clock, LockKeyhole } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { MOCK_SUPPLIER } from '@/lib/mock-data'
+import { SUPPLIER_CONFIG } from '@/lib/config'
 
 interface RestrictedPageProps {
   searchParams: Promise<{ reason?: string }>
@@ -47,20 +47,20 @@ export default async function RestrictedPage({
             <p className="text-muted-foreground mb-2 text-xs font-medium">
               공급자 문의
             </p>
-            <p className="font-semibold">{MOCK_SUPPLIER.name}</p>
-            {MOCK_SUPPLIER.contactPerson && (
+            <p className="font-semibold">{SUPPLIER_CONFIG.name}</p>
+            {SUPPLIER_CONFIG.contactPerson && (
               <p className="text-muted-foreground mt-1 text-sm">
-                담당자: {MOCK_SUPPLIER.contactPerson}
+                담당자: {SUPPLIER_CONFIG.contactPerson}
               </p>
             )}
-            {MOCK_SUPPLIER.email && (
+            {SUPPLIER_CONFIG.email && (
               <p className="text-muted-foreground mt-0.5 text-sm">
-                이메일: {MOCK_SUPPLIER.email}
+                이메일: {SUPPLIER_CONFIG.email}
               </p>
             )}
-            {MOCK_SUPPLIER.phone && (
+            {SUPPLIER_CONFIG.phone && (
               <p className="text-muted-foreground mt-0.5 text-sm">
-                전화: {MOCK_SUPPLIER.phone}
+                전화: {SUPPLIER_CONFIG.phone}
               </p>
             )}
           </CardContent>

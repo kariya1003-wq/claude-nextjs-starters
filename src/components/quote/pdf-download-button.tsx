@@ -1,9 +1,11 @@
 'use client'
 
 // PDF 다운로드 버튼 컴포넌트 (클라이언트 컴포넌트)
-// Phase 4에서 실제 PDF 생성 및 다운로드 기능 구현 예정
+// API Route를 통해 puppeteer로 생성된 PDF를 다운로드
 
-import { Download } from 'lucide-react'
+import { useState } from 'react'
+import { Download, Loader2 } from 'lucide-react'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 
 interface PdfDownloadButtonProps {
@@ -11,16 +13,48 @@ interface PdfDownloadButtonProps {
 }
 
 export function PdfDownloadButton({ quoteNumber }: PdfDownloadButtonProps) {
+  // PDF 생성 중 로딩 상태 관리
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const handleDownload = async () => {
+    setIsLoading(true)
+
+    try {
+      // PDF 생성 API 호출
+      const response = await fetch(`/api/pdf/${quoteNumber}`)
+
+      if (!response.ok) {
+        throw new Error(`PDF 생성 실패: ${response.status}`)
+      }
+
+      // blob으로 변환 후 가상 링크 클릭으로 다운로드
+      const blob = await response.blob()
+      const url = URL.createObjectURL(blob)
+
+      const anchor = document.createElement('a')
+      anchor.href = url
+      anchor.download = `quote-${quoteNumber}.pdf`
+      document.body.appendChild(anchor)
+      anchor.click()
+      document.body.removeChild(anchor)
+
+      // 메모리 해제
+      URL.revokeObjectURL(url)
+    } catch {
+      toast.error('PDF 생성에 실패했습니다.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
     <Button
       variant="outline"
       size="sm"
-      // Phase 4 구현 예정: quoteNumber를 사용하여 PDF 생성 및 다운로드
-      onClick={() => {
-        console.log('TODO Phase 4: download PDF for', quoteNumber)
-      }}
+      onClick={handleDownload}
+      disabled={isLoading}
     >
-      <Download />
+      {isLoading ? <Loader2 className="animate-spin" /> : <Download />}
       PDF 다운로드
     </Button>
   )

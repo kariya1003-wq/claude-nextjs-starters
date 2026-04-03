@@ -1,15 +1,15 @@
 // 견적서 목록 페이지 (F001, F007, F009)
-// Notion API 연동 전 MOCK_QUOTES 데이터를 사용하여 렌더링
+// Notion API에서 견적서 목록을 조회하여 렌더링
 
-import { MOCK_QUOTES } from '@/lib/mock-data'
+import { fetchQuotes } from '@/lib/notion'
 import { Container } from '@/components/layout/container'
 import { QuoteListTable } from '@/components/quote/quote-list-table'
 import { QuoteListCards } from '@/components/quote/quote-list-cards'
 import { QuoteEmptyState } from '@/components/quote/quote-empty-state'
 
-export default function QuoteListPage() {
-  // 추후 Notion API로 교체 예정
-  const quotes = MOCK_QUOTES
+export default async function QuoteListPage() {
+  // Notion API에서 견적서 목록 조회 (미설정 시 빈 배열 반환)
+  const quotes = await fetchQuotes()
 
   return (
     <main className="py-8">

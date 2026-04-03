@@ -1,8 +1,8 @@
 // 견적서 뷰어 페이지 (클라이언트용)
 // 클라이언트가 공유 URL로 접속하여 견적서를 확인하고 PDF로 저장하는 페이지 (F002, F003, F004, F007, F008, F009)
 
-import { notFound } from 'next/navigation'
-import { MOCK_QUOTES } from '@/lib/mock-data'
+import { notFound, redirect } from 'next/navigation'
+import { fetchQuoteByNumber } from '@/lib/notion'
 import { Container } from '@/components/layout/container'
 import { Separator } from '@/components/ui/separator'
 import { StatusBadge } from '@/components/quote/status-badge'
@@ -18,12 +18,20 @@ interface ViewerPageProps {
 export default async function ViewerPage({ params }: ViewerPageProps) {
   const { quoteNumber } = await params
 
-  // MOCK_QUOTES에서 quoteNumber로 견적서 조회
-  const quote = MOCK_QUOTES.find(q => q.quoteNumber === quoteNumber)
+  // Notion API에서 quoteNumber로 견적서 조회
+  const quote = await fetchQuoteByNumber(quoteNumber)
 
   // 견적서를 찾지 못한 경우 404
   if (!quote) {
     notFound()
+  }
+
+  // 접근 제한 판단 (redirect는 Next.js 내부적으로 throw하므로 try/catch 밖에서 호출)
+  if (quote.status === 'expired') {
+    redirect('/restricted?reason=expired')
+  }
+  if (!quote.isPublic || quote.status === 'draft') {
+    redirect('/restricted?reason=private')
   }
 
   return (

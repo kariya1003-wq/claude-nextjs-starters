@@ -3,7 +3,7 @@
 
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { MOCK_QUOTES } from '@/lib/mock-data'
+import { fetchQuoteByNumber } from '@/lib/notion'
 import { Container } from '@/components/layout/container'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { StatusBadge } from '@/components/quote/status-badge'
@@ -21,8 +21,8 @@ export default async function QuoteDetailPage({
 }: QuoteDetailPageProps) {
   const { quoteNumber } = await params
 
-  // MOCK_QUOTES에서 quoteNumber로 견적서 조회
-  const quote = MOCK_QUOTES.find(q => q.quoteNumber === quoteNumber)
+  // Notion API에서 quoteNumber로 견적서 조회
+  const quote = await fetchQuoteByNumber(quoteNumber)
 
   // 견적서를 찾지 못한 경우 404
   if (!quote) {

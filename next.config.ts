@@ -3,6 +3,8 @@ import type { NextConfig } from 'next'
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   compress: true,
+  // puppeteer를 서버 사이드 외부 패키지로 처리 (번들링 제외)
+  serverExternalPackages: ['puppeteer'],
   images: {
     formats: ['image/webp', 'image/avif'],
   },
