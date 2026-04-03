@@ -102,44 +102,40 @@
 
 ---
 
-### Phase 3: 핵심 기능 구현
+### Phase 3: 핵심 기능 구현 ✅
 
 > Notion API 연동, 접근 제어, PDF 생성 등 핵심 비즈니스 로직을 구현하는 단계
 
-- **Task 010: Notion API 견적서 목록 조회 구현** (F001)
-  - Notion Database Query API로 전체 견적서 목록 조회 Server Action 구현
-  - API 응답을 Zod 스키마로 유효성 검사 후 내부 타입으로 변환
-  - 목록 페이지에서 더미 데이터를 실제 API 데이터로 교체
-  - 에러 핸들링 및 로딩 상태 처리 (error.tsx, loading.tsx)
-  - Playwright MCP를 활용한 목록 조회 E2E 테스트
+- **Task 010: Notion API 견적서 목록 조회 구현** ✅ - 완료 (F001)
+  - ✅ Notion Database Query API로 전체 견적서 목록 조회 Server Action 구현
+  - ✅ API 응답을 Zod 스키마로 유효성 검사 후 내부 타입으로 변환
+  - ✅ 목록 페이지에서 더미 데이터를 실제 API 데이터로 교체
+  - ✅ 에러 핸들링 및 로딩 상태 처리 (error.tsx, loading.tsx)
 
-- **Task 011: Notion API 견적서 상세 조회 구현** (F002)
-  - 견적번호 기준 Notion Database Query API로 단건 조회 함수 구현
-  - 상세 페이지에서 더미 데이터를 실제 API 데이터로 교체
-  - 뷰어 페이지에서 더미 데이터를 실제 API 데이터로 교체
-  - 존재하지 않는 견적번호 접근 시 404 처리 (not-found.tsx)
-  - Playwright MCP를 활용한 상세 조회 E2E 테스트
+- **Task 011: Notion API 견적서 상세 조회 구현** ✅ - 완료 (F002)
+  - ✅ 견적번호 기준 Notion Database Query API로 단건 조회 함수 구현
+  - ✅ 상세 페이지에서 더미 데이터를 실제 API 데이터로 교체
+  - ✅ 뷰어 페이지에서 더미 데이터를 실제 API 데이터로 교체
+  - ✅ 존재하지 않는 견적번호 접근 시 404 처리 (not-found.tsx)
 
-- **Task 012: 접근 제한 로직 구현** (F005)
-  - 뷰어 페이지에서 isPublic 및 status 필드 기반 접근 가능 여부 판단
-  - 접근 불가 시 접근 제한 안내 페이지로 리디렉션 (서버사이드 redirect)
-  - 리디렉션 시 사유(reason) 쿼리 파라미터 전달 (expired / private)
-  - 발송 또는 확정 상태이면서 isPublic=true인 경우에만 뷰어 접근 허용
-  - Playwright MCP를 활용한 접근 제한 시나리오 E2E 테스트
+- **Task 012: 접근 제한 로직 구현** ✅ - 완료 (F005)
+  - ✅ 뷰어 페이지에서 isPublic 및 status 필드 기반 접근 가능 여부 판단
+  - ✅ 접근 불가 시 접근 제한 안내 페이지로 리디렉션 (서버사이드 redirect)
+  - ✅ 리디렉션 시 사유(reason) 쿼리 파라미터 전달 (expired / private)
+  - ✅ 발송 또는 확정 상태이면서 isPublic=true인 경우에만 뷰어 접근 허용
 
-- **Task 013: 고유 URL 생성 및 클립보드 복사 기능 구현** (F006)
-  - 견적번호 기반 고유 공유 URL 생성 로직 (`/viewer/[quoteNumber]`)
-  - 클립보드 복사 클라이언트 컴포넌트 구현 (navigator.clipboard API)
-  - 복사 성공/실패 시 토스트 알림 표시
-  - URL 복사 버튼에 복사 완료 상태 피드백 (아이콘 변경 등)
+- **Task 013: 고유 URL 생성 및 클립보드 복사 기능 구현** ✅ - 완료 (F006)
+  - ✅ 견적번호 기반 고유 공유 URL 생성 로직 (`/viewer/[quoteNumber]`)
+  - ✅ 클립보드 복사 클라이언트 컴포넌트 구현 (navigator.clipboard API)
+  - ✅ 복사 성공/실패 시 토스트 알림 표시
+  - ✅ URL 복사 버튼에 복사 완료 상태 피드백 (Copy → Check 아이콘 2초 전환)
 
-- **Task 014: puppeteer 기반 PDF 다운로드 기능 구현** (F004)
-  - puppeteer 패키지 설치 및 서버사이드 설정
-  - Next.js Route Handler (`/api/pdf/[quoteNumber]`)로 PDF 생성 API 구현
-  - 뷰어 페이지 URL을 puppeteer로 렌더링 후 PDF 변환
-  - A4 사이즈 PDF 출력 설정 (여백, 페이지 크기, 인쇄용 스타일)
-  - "PDF 다운로드" 버튼 클릭 시 API 호출 및 파일 다운로드 처리
-  - Playwright MCP를 활용한 PDF 다운로드 E2E 테스트
+- **Task 014: puppeteer 기반 PDF 다운로드 기능 구현** ✅ - 완료 (F004)
+  - ✅ puppeteer 패키지 설치 및 서버사이드 설정
+  - ✅ Next.js Route Handler (`/api/pdf/[quoteNumber]`)로 PDF 생성 API 구현
+  - ✅ 뷰어 페이지 URL을 puppeteer로 렌더링 후 PDF 변환
+  - ✅ A4 사이즈 PDF 출력 설정 (printBackground: true)
+  - ✅ "PDF 다운로드" 버튼 클릭 시 API 호출 및 파일 다운로드 처리
 
 ---
 
@@ -176,12 +172,12 @@
 ## 진행 상황 요약
 
 **📅 최종 업데이트**: 2026-04-03
-**📊 진행 상황**: Phase 2 완료 (9/18 Tasks 완료)
+**📊 진행 상황**: Phase 3 완료 (14/18 Tasks 완료, 77%)
 
-| Phase                           | 진행 상태           | Task 수  |
-| ------------------------------- | ------------------- | -------- |
-| Phase 1: 애플리케이션 골격 구축 | ✅ 완료             | 4개      |
-| Phase 2: UI/UX 완성             | ✅ 완료             | 5개      |
-| Phase 3: 핵심 기능 구현         | 진행 전             | 5개      |
-| Phase 4: 고급 기능 및 최적화    | 진행 전             | 4개      |
-| **합계**                        | **9/18 완료 (50%)** | **18개** |
+| Phase                           | 진행 상태            | Task 수  |
+| ------------------------------- | -------------------- | -------- |
+| Phase 1: 애플리케이션 골격 구축 | ✅ 완료              | 4개      |
+| Phase 2: UI/UX 완성             | ✅ 완료              | 5개      |
+| Phase 3: 핵심 기능 구현         | ✅ 완료              | 5개      |
+| Phase 4: 고급 기능 및 최적화    | 진행 전              | 4개      |
+| **합계**                        | **14/18 완료 (77%)** | **18개** |
