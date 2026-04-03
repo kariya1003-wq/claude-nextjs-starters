@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 노션 기반 견적서 웹뷰어
 
-## Getting Started
+노션 DB에 입력된 견적서 데이터를 전용 URL로 클라이언트에게 즉시 공유하고, PDF로 다운로드할 수 있는 웹 애플리케이션입니다.
 
-First, run the development server:
+## 🎯 프로젝트 개요
+
+**목적**: 노션 DB에 입력된 견적서 데이터를 전용 URL로 클라이언트에게 즉시 공유하고, PDF로 다운로드할 수 있게 한다.
+
+**사용자**: 견적서를 자주 발행하는 1인 프리랜서 또는 소규모 사업자(공급자)와 해당 견적서를 수신하는 클라이언트.
+
+## 📱 주요 페이지
+
+| 페이지         | 경로                         | 설명                                                                     |
+| -------------- | ---------------------------- | ------------------------------------------------------------------------ |
+| 견적서 목록    | `/`                          | 공급자가 노션 DB의 전체 견적서를 조회하는 허브 페이지                    |
+| 견적서 상세    | `/quotes/[id]`               | 공급자가 견적서를 미리 확인하고 클라이언트 공유 URL을 생성하는 페이지    |
+| 견적서 뷰어    | `/view/[id]`                 | 클라이언트가 공유 URL로 접속하여 견적서를 확인하고 PDF를 저장하는 페이지 |
+| 접근 제한 안내 | `/view/[id]` (자동 리디렉션) | 비공개 또는 만료된 견적서에 접근 시 안내 메시지를 표시하는 페이지        |
+
+## ⚡ 핵심 기능
+
+| 기능 ID | 기능명                  | 설명                                                           |
+| ------- | ----------------------- | -------------------------------------------------------------- |
+| F001    | 견적서 목록 조회        | Notion API를 통해 견적서 목록 전체 조회                        |
+| F002    | 견적서 상세 데이터 조회 | 특정 견적번호 기준으로 Notion DB에서 전체 필드 조회            |
+| F003    | 견적서 웹 렌더링        | 조회된 데이터를 견적서 양식으로 화면에 렌더링                  |
+| F004    | PDF 다운로드            | 현재 렌더링된 견적서를 PDF 파일로 변환 및 다운로드 (Puppeteer) |
+| F005    | 접근 제한 처리          | 공개 여부가 false이거나 만료 상태인 경우 뷰어 접근 차단        |
+| F006    | 고유 URL 생성 및 복사   | 견적번호 기반의 공유 URL을 생성하고 클립보드에 복사            |
+| F007    | 견적서 상태 배지 표시   | 초안 / 발송 / 확정 / 만료 상태를 컬러 배지로 표시              |
+| F008    | OG 메타태그 설정        | 링크 공유 시 견적번호, 클라이언트명이 포함된 미리보기 표시     |
+| F009    | 모바일 반응형 레이아웃  | 모든 페이지에서 모바일 기기에서도 정상 확인 가능               |
+
+## 🛠️ 기술 스택
+
+| 기술             | 버전   | 용도                               |
+| ---------------- | ------ | ---------------------------------- |
+| Next.js          | 15.5.3 | App Router 기반 풀스택 프레임워크  |
+| React            | 19.1.0 | UI 렌더링 런타임                   |
+| TypeScript       | 5.x    | 타입 안전성 확보                   |
+| TailwindCSS      | v4     | 유틸리티 기반 스타일링             |
+| shadcn/ui        | latest | UI 컴포넌트 (new-york style)       |
+| Zod              | latest | Notion API 응답 데이터 유효성 검사 |
+| @notionhq/client | latest | Notion API 공식 SDK                |
+| Puppeteer        | latest | 서버 사이드 PDF 생성               |
+
+## 🚀 시작하기
 
 ```bash
+# 의존성 설치
+npm install
+
+# 환경 변수 설정
+cp .env.local.example .env.local
+# .env.local 파일을 열어 NOTION_API_KEY, NOTION_DATABASE_ID 입력
+
+# 개발 서버 실행
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# 프로덕션 빌드
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📖 문서
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [프로젝트 요구사항 (PRD)](./docs/PRD.md)
+- [개발 가이드](./CLAUDE.md)
