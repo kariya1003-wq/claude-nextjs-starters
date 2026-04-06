@@ -39,3 +39,8 @@ Thumbs.db
 
 # Generated files
 next-env.d.ts
+
+# MCP 및 도구 생성 파일
+.playwright-mcp/
+shrimp_data/
+viewer_page.html
