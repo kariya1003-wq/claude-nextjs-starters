@@ -23,8 +23,18 @@ export function PdfDownloadButton({ quoteNumber }: PdfDownloadButtonProps) {
       // PDF 생성 API 호출
       const response = await fetch(`/api/pdf/${quoteNumber}`)
 
+      // HTTP 상태코드별 에러 메시지 분기
+      if (response.status === 403) {
+        toast.error('접근 권한이 없는 견적서입니다.')
+        return
+      }
+      if (response.status === 404) {
+        toast.error('견적서를 찾을 수 없습니다.')
+        return
+      }
       if (!response.ok) {
-        throw new Error(`PDF 생성 실패: ${response.status}`)
+        toast.error('PDF 생성에 실패했습니다. 잠시 후 다시 시도해 주세요.')
+        return
       }
 
       // blob으로 변환 후 가상 링크 클릭으로 다운로드
