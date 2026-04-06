@@ -15,11 +15,13 @@ const STATUS_LABELS: Record<QuoteStatus, string> = {
 
 // 상태별 색상 클래스 (초안: 회색, 발송: 파랑, 확정: 초록, 만료: 빨강)
 const STATUS_CLASSES: Record<QuoteStatus, string> = {
-  draft: 'border-transparent bg-gray-100 text-gray-700 hover:bg-gray-100/80',
-  sent: 'border-transparent bg-blue-100 text-blue-700 hover:bg-blue-100/80',
+  draft:
+    'border-transparent bg-zinc-100 text-zinc-600 hover:bg-zinc-100/80 font-semibold',
+  sent: 'border-transparent bg-blue-50 text-blue-600 hover:bg-blue-50/80 font-semibold',
   confirmed:
-    'border-transparent bg-green-100 text-green-700 hover:bg-green-100/80',
-  expired: 'border-transparent bg-red-100 text-red-700 hover:bg-red-100/80',
+    'border-transparent bg-emerald-50 text-emerald-700 hover:bg-emerald-50/80 font-semibold',
+  expired:
+    'border-transparent bg-red-50 text-red-600 hover:bg-red-50/80 font-semibold',
 }
 
 interface StatusBadgeProps {
@@ -33,7 +35,7 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
   return (
     <Badge
       variant="outline"
-      className={cn(STATUS_CLASSES[status], className)}
+      className={cn(STATUS_CLASSES[status], 'rounded-full px-2.5', className)}
       aria-label={`견적서 상태: ${label}`}
     >
       {label}

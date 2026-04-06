@@ -2,6 +2,9 @@
 // Notion API에서 견적서 목록을 조회하여 렌더링
 
 import { fetchQuotes } from '@/lib/notion'
+
+// 목록 페이지: 30초마다 ISR 재생성 (목록은 약간의 지연 허용)
+export const revalidate = 30
 import { Container } from '@/components/layout/container'
 import { QuoteListTable } from '@/components/quote/quote-list-table'
 import { QuoteListCards } from '@/components/quote/quote-list-cards'
@@ -13,7 +16,7 @@ export default async function QuoteListPage() {
 
   return (
     <main className="py-8">
-      <Container size="lg">
+      <Container size="md">
         {/* 페이지 제목 */}
         <div className="mb-6">
           <h1 className="text-2xl font-bold tracking-tight">견적서 목록</h1>

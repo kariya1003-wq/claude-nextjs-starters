@@ -13,7 +13,7 @@ export function Container({
 }: ContainerProps) {
   const sizes = {
     sm: 'max-w-3xl',
-    md: 'max-w-5xl',
+    md: 'max-w-4xl',
     lg: 'max-w-7xl',
     xl: 'max-w-[1400px]',
     full: 'max-w-full',

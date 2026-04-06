@@ -11,23 +11,23 @@ interface QuoteListTableProps {
 
 export function QuoteListTable({ quotes }: QuoteListTableProps) {
   return (
-    <div className="overflow-x-auto rounded-xl border">
+    <div className="overflow-x-auto rounded-xl border shadow-sm">
       <table className="w-full text-sm">
         <thead>
-          <tr className="bg-muted/50 border-b">
-            <th className="text-muted-foreground px-4 py-3 text-left font-medium">
+          <tr className="bg-muted/40 border-b">
+            <th className="text-muted-foreground px-5 py-3.5 text-left text-xs font-semibold tracking-wide uppercase">
               견적번호
             </th>
-            <th className="text-muted-foreground px-4 py-3 text-left font-medium">
+            <th className="text-muted-foreground px-5 py-3.5 text-left text-xs font-semibold tracking-wide uppercase">
               클라이언트명
             </th>
-            <th className="text-muted-foreground px-4 py-3 text-left font-medium">
+            <th className="text-muted-foreground px-5 py-3.5 text-left text-xs font-semibold tracking-wide uppercase">
               발행일
             </th>
-            <th className="text-muted-foreground px-4 py-3 text-left font-medium">
+            <th className="text-muted-foreground px-5 py-3.5 text-left text-xs font-semibold tracking-wide uppercase">
               만료일
             </th>
-            <th className="text-muted-foreground px-4 py-3 text-left font-medium">
+            <th className="text-muted-foreground px-5 py-3.5 text-left text-xs font-semibold tracking-wide uppercase">
               상태
             </th>
           </tr>
@@ -35,26 +35,27 @@ export function QuoteListTable({ quotes }: QuoteListTableProps) {
         <tbody className="divide-y">
           {quotes.map(quote => (
             // 전체 행 클릭 가능: after:absolute after:inset-0 패턴
-            <tr key={quote.id} className="group hover:bg-muted/50 relative">
-              <td className="px-4 py-3">
+            <tr
+              key={quote.id}
+              className="group hover:bg-muted/30 relative transition-colors"
+            >
+              <td className="px-5 py-4">
                 {/* 첫 번째 셀에 전체 행을 감싸는 링크 */}
                 <Link
                   href={`/quotes/${quote.quoteNumber}`}
-                  className="font-medium after:absolute after:inset-0"
+                  className="font-semibold after:absolute after:inset-0"
                 >
                   {quote.quoteNumber}
                 </Link>
               </td>
-              <td className="text-muted-foreground px-4 py-3">
-                {quote.clientName}
-              </td>
-              <td className="text-muted-foreground px-4 py-3">
+              <td className="px-5 py-4">{quote.clientName}</td>
+              <td className="text-muted-foreground px-5 py-4">
                 {quote.issueDate}
               </td>
-              <td className="text-muted-foreground px-4 py-3">
+              <td className="text-muted-foreground px-5 py-4">
                 {quote.expiryDate}
               </td>
-              <td className="px-4 py-3">
+              <td className="px-5 py-4">
                 <StatusBadge status={quote.status} />
               </td>
             </tr>

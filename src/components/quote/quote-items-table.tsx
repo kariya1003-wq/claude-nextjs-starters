@@ -14,17 +14,17 @@ export function QuoteItemsTable({ items }: QuoteItemsTableProps) {
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b">
-            <th className="text-muted-foreground py-3 pr-4 text-left font-medium">
+            <th className="text-muted-foreground py-3.5 pr-4 text-left font-medium">
               품목명
             </th>
             {/* 단가 컬럼: 모바일에서 숨김 */}
-            <th className="text-muted-foreground hidden py-3 pr-4 text-right font-medium sm:table-cell">
+            <th className="text-muted-foreground hidden py-3.5 pr-4 text-right font-medium sm:table-cell">
               단가
             </th>
-            <th className="text-muted-foreground py-3 pr-4 text-right font-medium">
+            <th className="text-muted-foreground py-3.5 pr-4 text-right font-medium">
               수량
             </th>
-            <th className="text-muted-foreground py-3 text-right font-medium">
+            <th className="text-muted-foreground py-3.5 text-right font-medium">
               합계
             </th>
           </tr>
@@ -32,15 +32,15 @@ export function QuoteItemsTable({ items }: QuoteItemsTableProps) {
         <tbody className="divide-y">
           {items.map((item, index) => (
             <tr key={index} className="group">
-              <td className="py-3 pr-4 font-medium">{item.name}</td>
+              <td className="py-4 pr-4 font-medium">{item.name}</td>
               {/* 단가 컬럼: 모바일에서 숨김 */}
-              <td className="text-muted-foreground hidden py-3 pr-4 text-right sm:table-cell">
+              <td className="text-muted-foreground hidden py-4 pr-4 text-right sm:table-cell">
                 {formatKRW(item.unitPrice)}
               </td>
-              <td className="text-muted-foreground py-3 pr-4 text-right">
+              <td className="text-muted-foreground py-4 pr-4 text-right">
                 {item.quantity}
               </td>
-              <td className="py-3 text-right font-medium">
+              <td className="py-4 text-right font-medium">
                 {formatKRW(item.amount)}
               </td>
             </tr>

@@ -32,9 +32,9 @@ export default async function QuoteDetailPage({
   return (
     <main className="py-8">
       <Container size="md">
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-5">
           {/* 상단 액션바 */}
-          <div className="flex items-center justify-between">
+          <div className="mb-2 flex items-center justify-between">
             <Link
               href="/"
               className="text-muted-foreground hover:text-foreground flex items-center gap-1 text-sm"
