@@ -3,8 +3,13 @@ import type { NextConfig } from 'next'
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   compress: true,
-  // puppeteer를 서버 사이드 외부 패키지로 처리 (번들링 제외)
-  serverExternalPackages: ['puppeteer'],
+  // puppeteer 관련 패키지를 서버 사이드 외부 패키지로 처리 (번들링 제외)
+  // 로컬: puppeteer, Vercel: puppeteer-core + @sparticuz/chromium-min
+  serverExternalPackages: [
+    'puppeteer',
+    'puppeteer-core',
+    '@sparticuz/chromium-min',
+  ],
   images: {
     formats: ['image/webp', 'image/avif'],
   },
