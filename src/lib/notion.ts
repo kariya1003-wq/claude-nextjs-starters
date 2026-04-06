@@ -1,5 +1,6 @@
 import { Client } from '@notionhq/client'
 import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints'
+import { cache } from 'react'
 import { env } from './env'
 import {
   quoteSchema,
@@ -27,6 +28,8 @@ function mapStatusToEnum(status: string | null | undefined): QuoteStatus {
     대기: 'draft',
     발송: 'sent',
     확정: 'confirmed',
+    승인: 'confirmed',
+    거절: 'expired',
     만료: 'expired',
   }
   return statusMap[status ?? ''] ?? 'draft'
@@ -124,10 +127,14 @@ function mapNotionPageToQuote(
     const expiryDate =
       expiryDateProp?.type === 'date' ? (expiryDateProp.date?.start ?? '') : ''
 
-    // 상태 (select 타입) → 내부 enum으로 변환
+    // 상태 (status 타입) → 내부 enum으로 변환
+    // Notion의 Status 속성은 type='status'이며 select와 다름
     const statusProp = getProp(props, '상태')
     const statusValue =
-      statusProp?.type === 'select' ? statusProp.select?.name : undefined
+      statusProp?.type === 'status'
+        ? (statusProp as { type: 'status'; status: { name: string } | null })
+            .status?.name
+        : undefined
     const status = mapStatusToEnum(statusValue)
 
     // 총금액 (number 타입)
@@ -162,8 +169,8 @@ function mapNotionPageToQuote(
       },
       memo: memo || undefined,
       status,
-      // Notion DB에 공개 여부 필드 없음 → 기본값 false
-      isPublic: false,
+      // Notion DB에 공개 여부 필드 없음 → sent/confirmed 상태면 공개 처리
+      isPublic: status === 'sent' || status === 'confirmed',
       totalAmount,
     })
   } catch (error) {
@@ -212,29 +219,57 @@ export async function fetchQuoteItems(itemIds: string[]): Promise<QuoteItem[]> {
   }
 }
 
+// Notion REST API 직접 호출 헬퍼 (databases.query 엔드포인트)
+// revalidate: undefined → no-store(실시간), 숫자 → ISR(초 단위)
+async function queryDatabase(
+  databaseId: string,
+  body: Record<string, unknown> = {},
+  revalidate?: number
+): Promise<{ results: PageObjectResponse[] }> {
+  const cacheOption: RequestInit =
+    revalidate !== undefined ? { next: { revalidate } } : { cache: 'no-store' }
+
+  const res = await fetch(
+    `https://api.notion.com/v1/databases/${databaseId}/query`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${env.NOTION_API_KEY}`,
+        'Notion-Version': '2022-06-28',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+      ...cacheOption,
+    }
+  )
+  if (!res.ok) {
+    const err = await res.json()
+    throw new Error(err.message ?? 'Notion API 오류')
+  }
+  const data = await res.json()
+  return {
+    results: (data.results ?? []).filter(
+      (p: PageObjectResponse) => 'properties' in p && p.object === 'page'
+    ),
+  }
+}
+
 // Invoices DB 전체 견적서 목록 조회
-// @notionhq/client v5에서는 databases.query 대신 dataSources.query 사용
 export async function fetchQuotes(): Promise<Quote[]> {
   // Notion 미설정 시 빈 배열 반환 (빌드/런타임 오류 방지)
   if (!isNotionConfigured()) return []
 
   try {
-    const response = await notion.dataSources.query({
-      data_source_id: env.NOTION_DATABASE_ID!,
-    })
+    // 목록은 30초 ISR 캐싱 적용 (약간의 지연 허용)
+    const response = await queryDatabase(env.NOTION_DATABASE_ID!, {}, 30)
 
-    // PageObjectResponse만 필터링 후 각 페이지를 Quote로 변환 (품목 별도 조회 포함)
+    // 각 페이지를 Quote로 변환 (품목 별도 조회 포함)
     const quotes = await Promise.all(
-      response.results
-        .filter(
-          (page): page is PageObjectResponse =>
-            'properties' in page && page.object === 'page'
-        )
-        .map(async page => {
-          const itemIds = extractItemIds(page)
-          const items = await fetchQuoteItems(itemIds)
-          return mapNotionPageToQuote(page, items)
-        })
+      response.results.map(async page => {
+        const itemIds = extractItemIds(page)
+        const items = await fetchQuoteItems(itemIds)
+        return mapNotionPageToQuote(page, items)
+      })
     )
 
     // null 제거 후 반환
@@ -246,7 +281,8 @@ export async function fetchQuotes(): Promise<Quote[]> {
 }
 
 // 견적서 번호(Title 필드)로 단일 견적서 조회
-export async function fetchQuoteByNumber(
+// React cache()로 래핑: 동일 요청 내 generateMetadata + page 컴포넌트 모두 호출 시 1회만 API 호출
+export const fetchQuoteByNumber = cache(async function fetchQuoteByNumber(
   quoteNumber: string
 ): Promise<Quote | null> {
   // Notion 미설정 시 null 반환
@@ -254,8 +290,7 @@ export async function fetchQuoteByNumber(
 
   try {
     // Title 필드(견적서 번호)로 필터링
-    const response = await notion.dataSources.query({
-      data_source_id: env.NOTION_DATABASE_ID!,
+    const response = await queryDatabase(env.NOTION_DATABASE_ID!, {
       filter: {
         property: '견적서 번호',
         title: {
@@ -281,4 +316,4 @@ export async function fetchQuoteByNumber(
     console.error(`견적서 조회 오류 (번호: ${quoteNumber}):`, error)
     return null
   }
-}
+})
