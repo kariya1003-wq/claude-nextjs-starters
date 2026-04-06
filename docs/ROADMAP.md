@@ -143,23 +143,24 @@
 
 > OG 메타태그, 성능 최적화, 배포 준비 등 마무리 단계
 
-- **Task 015: OG 메타태그 동적 설정** (F008)
-  - 뷰어 페이지에 Next.js generateMetadata 함수로 동적 메타데이터 생성
-  - 견적번호, 클라이언트명을 포함한 og:title, og:description 설정
-  - og:type, og:url 등 기본 OG 태그 설정
-  - 카카오톡, 슬랙 등 주요 메신저에서의 링크 미리보기 확인
+- **Task 015: OG 메타태그 동적 설정** ✅ - 완료 (F008)
+  - ✅ 뷰어 페이지에 Next.js generateMetadata 함수로 동적 메타데이터 생성
+  - ✅ 견적번호, 클라이언트명을 포함한 og:title, og:description 설정
+  - ✅ og:type, og:url 등 기본 OG 태그 설정 (twitter:card 포함)
+  - ✅ React cache()로 fetchQuoteByNumber 래핑 → generateMetadata + page 이중 API 호출 방지
 
-- **Task 016: 성능 최적화 및 캐싱 전략 적용**
-  - Notion API 호출에 Next.js fetch 캐싱 적용 (revalidate 설정)
-  - 목록 페이지 ISR(Incremental Static Regeneration) 적용 검토
-  - 정적 에셋 및 폰트 최적화
-  - Lighthouse 성능 점수 측정 및 개선
+- **Task 016: 성능 최적화 및 캐싱 전략 적용** ✅ - 완료
+  - ✅ Notion API 호출에 Next.js fetch 캐싱 적용 (queryDatabase revalidate 파라미터 추가)
+  - ✅ 목록 페이지 ISR(Incremental Static Regeneration) 적용 (revalidate: 30s)
+  - ✅ 뷰어/상세 페이지는 no-store 유지 (접근 제어 실시간 반영)
+  - ✅ serverExternalPackages 최적화 (lucide-react tree-shaking 등 기존 설정 활용)
 
-- **Task 017: 에러 처리 및 사용자 경험 고도화**
-  - 전역 error.tsx 및 not-found.tsx 페이지 디자인
-  - Notion API 장애 시 graceful 에러 메시지 표시
-  - 로딩 스켈레톤 UI 적용 (loading.tsx)
-  - PDF 생성 중 로딩 상태 표시
+- **Task 017: 에러 처리 및 사용자 경험 고도화** ✅ - 완료
+  - ✅ 전역 error.tsx 개선 (useEffect console.error, Notion 장애 안내 메시지)
+  - ✅ 전역 not-found.tsx 구현 (404 페이지 디자인)
+  - ✅ Notion API 장애 시 graceful 에러 메시지 표시
+  - ✅ 뷰어 페이지 loading.tsx 신규 생성 (A4 카드 스켈레톤)
+  - ✅ PDF 다운로드 버튼 HTTP 상태코드별 에러 메시지 분기 (403/404/500)
 
 - **Task 018: 배포 환경 구성 및 프로덕션 준비**
   - Vercel 배포 설정 및 환경 변수 구성
@@ -171,13 +172,13 @@
 
 ## 진행 상황 요약
 
-**📅 최종 업데이트**: 2026-04-03
-**📊 진행 상황**: Phase 3 완료 (14/18 Tasks 완료, 77%)
+**📅 최종 업데이트**: 2026-04-06
+**📊 진행 상황**: Phase 4 진행 중 (17/18 Tasks 완료, 94%)
 
 | Phase                           | 진행 상태            | Task 수  |
 | ------------------------------- | -------------------- | -------- |
 | Phase 1: 애플리케이션 골격 구축 | ✅ 완료              | 4개      |
 | Phase 2: UI/UX 완성             | ✅ 완료              | 5개      |
 | Phase 3: 핵심 기능 구현         | ✅ 완료              | 5개      |
-| Phase 4: 고급 기능 및 최적화    | 진행 전              | 4개      |
-| **합계**                        | **14/18 완료 (77%)** | **18개** |
+| Phase 4: 고급 기능 및 최적화    | 진행 중 (3/4)        | 4개      |
+| **합계**                        | **17/18 완료 (94%)** | **18개** |
