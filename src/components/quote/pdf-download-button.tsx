@@ -50,6 +50,11 @@ export function PdfDownloadButton({ quoteNumber }: PdfDownloadButtonProps) {
 
       // 메모리 해제
       URL.revokeObjectURL(url)
+
+      // 다운로드 완료 알림
+      toast.success(`PDF가 저장되었습니다.`, {
+        description: `quote-${quoteNumber}.pdf`,
+      })
     } catch {
       toast.error('PDF 생성에 실패했습니다.')
     } finally {
