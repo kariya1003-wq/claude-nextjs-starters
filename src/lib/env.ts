@@ -11,6 +11,9 @@ const envSchema = z.object({
   // Notion API 연동 (F001, F002)
   NOTION_API_KEY: z.string().optional(),
   NOTION_DATABASE_ID: z.string().optional(),
+  // 관리자 인증
+  ADMIN_PASSWORD: z.string().min(1).optional(),
+  SESSION_SECRET: z.string().min(1).optional(),
 })
 
 export const env = envSchema.parse({
@@ -19,6 +22,8 @@ export const env = envSchema.parse({
   NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   NOTION_API_KEY: process.env.NOTION_API_KEY,
   NOTION_DATABASE_ID: process.env.NOTION_DATABASE_ID,
+  ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
+  SESSION_SECRET: process.env.SESSION_SECRET,
 })
 
 export type Env = z.infer<typeof envSchema>

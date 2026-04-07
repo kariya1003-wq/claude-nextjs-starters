@@ -13,6 +13,7 @@ import {
   Sun,
   Moon,
   Monitor,
+  LogOut,
 } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import {
@@ -22,6 +23,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { cn } from '@/lib/utils'
+import { logoutAction } from '@/app/login/actions'
 
 interface AdminSidebarProps {
   collapsed: boolean
@@ -154,6 +156,21 @@ export function AdminSidebar({ collapsed, onToggle }: AdminSidebarProps) {
             </DropdownMenuContent>
           </DropdownMenu>
         )}
+
+        {/* 로그아웃 버튼 */}
+        <form action={logoutAction}>
+          <button
+            type="submit"
+            className={cn(
+              'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground flex w-full items-center rounded-md px-2 py-2 text-sm transition-colors',
+              collapsed ? 'justify-center' : 'gap-3'
+            )}
+            title="로그아웃"
+          >
+            <LogOut className="h-5 w-5 shrink-0" />
+            {!collapsed && <span>로그아웃</span>}
+          </button>
+        </form>
 
         {/* 접기/펼치기 토글 버튼 */}
         <button
