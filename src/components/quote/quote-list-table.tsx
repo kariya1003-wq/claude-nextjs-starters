@@ -4,6 +4,7 @@
 import Link from 'next/link'
 import { type Quote } from '@/lib/types'
 import { StatusBadge } from '@/components/quote/status-badge'
+import { QuoteCopyLinkButton } from '@/components/quote/quote-copy-link-button'
 
 interface QuoteListTableProps {
   quotes: Quote[]
@@ -29,6 +30,10 @@ export function QuoteListTable({ quotes }: QuoteListTableProps) {
             </th>
             <th className="text-muted-foreground px-5 py-3.5 text-left text-xs font-semibold tracking-wide uppercase">
               상태
+            </th>
+            {/* 클라이언트 링크 복사 컬럼 */}
+            <th className="text-muted-foreground px-5 py-3.5 text-left text-xs font-semibold tracking-wide uppercase">
+              링크
             </th>
           </tr>
         </thead>
@@ -57,6 +62,13 @@ export function QuoteListTable({ quotes }: QuoteListTableProps) {
               </td>
               <td className="px-5 py-4">
                 <StatusBadge status={quote.status} />
+              </td>
+              {/* 링크 복사 버튼: 행 전체 링크 클릭과 분리 */}
+              <td className="px-5 py-4" onClick={e => e.stopPropagation()}>
+                <QuoteCopyLinkButton
+                  quoteNumber={quote.quoteNumber}
+                  isPublic={quote.isPublic}
+                />
               </td>
             </tr>
           ))}
