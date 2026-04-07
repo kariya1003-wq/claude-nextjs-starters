@@ -69,8 +69,8 @@ export default async function ViewerPage({ params }: ViewerPageProps) {
   }
 
   return (
-    // 뷰어는 항상 라이트 모드 강제 적용 (PDF 출력 일관성 보장)
-    <main className="light bg-muted/30 min-h-screen pb-12">
+    // force-light: 다크모드 CSS 변수 강제 override → PDF 출력 일관성 보장
+    <main className="force-light bg-muted/30 min-h-screen pb-12">
       {/* 컨트롤 바: 상태 배지 표시, 인쇄 시 숨김 */}
       {/* size="sm" 으로 A4 문서 영역과 동일한 너비 적용 */}
       <div className="bg-background/80 sticky top-0 z-10 mb-8 border-b backdrop-blur-sm print:hidden">
