@@ -254,8 +254,16 @@ async function queryDatabase(
   }
 }
 
-// Invoices DB 전체 견적서 목록 조회
-export async function fetchQuotes(): Promise<Quote[]> {
+// 견적서 목록 필터 파라미터 타입
+export interface QuoteFilter {
+  /** 견적서 상태 필터 */
+  status?: QuoteStatus
+  /** 견적번호 또는 클라이언트명 검색 */
+  search?: string
+}
+
+// Invoices DB 전체 견적서 목록 조회 (필터 옵션 지원)
+export async function fetchQuotes(filter?: QuoteFilter): Promise<Quote[]> {
   // Notion 미설정 시 빈 배열 반환 (빌드/런타임 오류 방지)
   if (!isNotionConfigured()) return []
 
@@ -264,7 +272,7 @@ export async function fetchQuotes(): Promise<Quote[]> {
     const response = await queryDatabase(env.NOTION_DATABASE_ID!, {}, 30)
 
     // 각 페이지를 Quote로 변환 (품목 별도 조회 포함)
-    const quotes = await Promise.all(
+    const rawQuotes = await Promise.all(
       response.results.map(async page => {
         const itemIds = extractItemIds(page)
         const items = await fetchQuoteItems(itemIds)
@@ -272,8 +280,25 @@ export async function fetchQuotes(): Promise<Quote[]> {
       })
     )
 
-    // null 제거 후 반환
-    return quotes.filter((q): q is Quote => q !== null)
+    // null 제거
+    let quotes = rawQuotes.filter((q): q is Quote => q !== null)
+
+    // 상태 필터 적용 (클라이언트 사이드)
+    if (filter?.status) {
+      quotes = quotes.filter(q => q.status === filter.status)
+    }
+
+    // 검색어 필터 적용: 견적번호 또는 클라이언트명 포함 여부 (대소문자 무관)
+    if (filter?.search && filter.search.trim() !== '') {
+      const keyword = filter.search.trim().toLowerCase()
+      quotes = quotes.filter(
+        q =>
+          q.quoteNumber.toLowerCase().includes(keyword) ||
+          q.clientName.toLowerCase().includes(keyword)
+      )
+    }
+
+    return quotes
   } catch (error) {
     console.error('견적서 목록 조회 오류:', error)
     return []
