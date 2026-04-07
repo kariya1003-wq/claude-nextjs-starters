@@ -63,8 +63,8 @@ export function QuoteListTable({ quotes }: QuoteListTableProps) {
               <td className="px-5 py-4">
                 <StatusBadge status={quote.status} />
               </td>
-              {/* 링크 복사 버튼: 행 전체 링크 클릭과 분리 */}
-              <td className="px-5 py-4" onClick={e => e.stopPropagation()}>
+              {/* 링크 복사 버튼: QuoteCopyLinkButton 내부에서 이벤트 전파 차단 */}
+              <td className="relative z-10 px-5 py-4">
                 <QuoteCopyLinkButton
                   quoteNumber={quote.quoteNumber}
                   isPublic={quote.isPublic}

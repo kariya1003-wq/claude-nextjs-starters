@@ -38,8 +38,8 @@ export function QuoteListCards({ quotes }: QuoteListCardsProps) {
                   {/* 상태 배지 + 링크 복사 버튼 */}
                   <div className="flex items-center gap-2 pt-0.5">
                     <StatusBadge status={quote.status} />
-                    {/* 링크 복사 버튼: 카드 클릭 이벤트와 분리 */}
-                    <div onClick={e => e.preventDefault()}>
+                    {/* 링크 복사 버튼: QuoteCopyLinkButton 내부에서 이벤트 차단 */}
+                    <div className="relative z-10">
                       <QuoteCopyLinkButton
                         quoteNumber={quote.quoteNumber}
                         isPublic={quote.isPublic}
