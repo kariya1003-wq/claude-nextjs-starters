@@ -5,7 +5,22 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ChevronLeft, ChevronRight, FileText, LayoutList } from 'lucide-react'
+import {
+  ChevronLeft,
+  ChevronRight,
+  FileText,
+  LayoutList,
+  Sun,
+  Moon,
+  Monitor,
+} from 'lucide-react'
+import { useTheme } from 'next-themes'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { cn } from '@/lib/utils'
 
 interface AdminSidebarProps {
@@ -24,6 +39,21 @@ const NAV_ITEMS = [
 
 export function AdminSidebar({ collapsed, onToggle }: AdminSidebarProps) {
   const pathname = usePathname()
+  const { theme, setTheme } = useTheme()
+
+  // 현재 테마에 맞는 아이콘 반환
+  function ThemeIcon() {
+    if (theme === 'light') return <Sun className="h-5 w-5 shrink-0" />
+    if (theme === 'dark') return <Moon className="h-5 w-5 shrink-0" />
+    return <Monitor className="h-5 w-5 shrink-0" />
+  }
+
+  // 테마 순환 전환: light → dark → system → light
+  const cycleTheme = () => {
+    const order = ['light', 'dark', 'system']
+    const next = order[(order.indexOf(theme ?? 'system') + 1) % 3]
+    setTheme(next)
+  }
 
   return (
     <div
@@ -81,8 +111,51 @@ export function AdminSidebar({ collapsed, onToggle }: AdminSidebarProps) {
         })}
       </nav>
 
-      {/* 하단: 사이드바 접기/펼치기 토글 버튼 */}
-      <div className="border-sidebar-border border-t p-2">
+      {/* 하단: 테마 토글 + 접기 버튼 */}
+      <div className="border-sidebar-border space-y-1 border-t p-2">
+        {/* 테마 토글 버튼 */}
+        {collapsed ? (
+          // 접힌 상태: 단순 버튼으로 light → dark → system 순환
+          <button
+            onClick={cycleTheme}
+            className={cn(
+              'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground flex w-full items-center justify-center rounded-md px-2 py-2 text-sm transition-colors'
+            )}
+            title={`현재 테마: ${theme ?? 'system'} (클릭하여 전환)`}
+          >
+            <ThemeIcon />
+          </button>
+        ) : (
+          // 펼친 상태: 드롭다운 메뉴로 테마 선택
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                className={cn(
+                  'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground flex w-full items-center gap-3 rounded-md px-2 py-2 text-sm transition-colors'
+                )}
+              >
+                <ThemeIcon />
+                <span>테마</span>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent side="right" align="end">
+              <DropdownMenuItem onClick={() => setTheme('light')}>
+                <Sun className="mr-2 h-4 w-4" />
+                라이트
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme('dark')}>
+                <Moon className="mr-2 h-4 w-4" />
+                다크
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme('system')}>
+                <Monitor className="mr-2 h-4 w-4" />
+                시스템
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
+
+        {/* 접기/펼치기 토글 버튼 */}
         <button
           onClick={onToggle}
           className={cn(
